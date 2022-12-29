@@ -11,7 +11,19 @@
 		9F21CFDE290EAE8400A47AC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F21CFDD290EAE8400A47AC5 /* ContentView.swift */; };
 		9F21CFE0290EAE8700A47AC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F21CFDF290EAE8700A47AC5 /* Assets.xcassets */; };
 		9F21CFE3290EAE8700A47AC5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F21CFE2290EAE8700A47AC5 /* Preview Assets.xcassets */; };
+		9F3ABC24295DD08F00888778 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3ABC23295DD08F00888778 /* GameView.swift */; };
+		9F3ABC26295DD26900888778 /* QueryOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3ABC25295DD26900888778 /* QueryOptionView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9F21CFFE290EB06D00A47AC5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F21CFFA290EB06D00A47AC5 /* Memorize.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9F1AB87928E9EF57006B766D;
+			remoteInfo = Memorize;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9F21CFD8290EAE8400A47AC5 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +31,9 @@
 		9F21CFDD290EAE8400A47AC5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9F21CFDF290EAE8700A47AC5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F21CFE2290EAE8700A47AC5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9F21CFFA290EB06D00A47AC5 /* Memorize.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Memorize.xcodeproj; path = ../../../../Memorize/Memorize.xcodeproj; sourceTree = "<group>"; };
+		9F3ABC23295DD08F00888778 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		9F3ABC25295DD26900888778 /* QueryOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryOptionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +66,9 @@
 		9F21CFDA290EAE8400A47AC5 /* QuizApp */ = {
 			isa = PBXGroup;
 			children = (
+				9F3ABC21295DC2A500888778 /* Views */,
+				9F3ABC20295DC29900888778 /* ViewModels */,
+				9F3ABC1E295DC28E00888778 /* Model */,
 				9F21CFDB290EAE8400A47AC5 /* QuizAppApp.swift */,
 				9F21CFDD290EAE8400A47AC5 /* ContentView.swift */,
 				9F21CFDF290EAE8700A47AC5 /* Assets.xcassets */,
@@ -62,9 +80,49 @@
 		9F21CFE1290EAE8700A47AC5 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				9F21CFF9290EB06C00A47AC5 /* Memorize */,
 				9F21CFE2290EAE8700A47AC5 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9F21CFF9290EB06C00A47AC5 /* Memorize */ = {
+			isa = PBXGroup;
+			children = (
+				9F21CFFA290EB06D00A47AC5 /* Memorize.xcodeproj */,
+			);
+			path = Memorize;
+			sourceTree = "<group>";
+		};
+		9F21CFFB290EB06D00A47AC5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F21CFFF290EB06D00A47AC5 /* Memorize.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9F3ABC1E295DC28E00888778 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9F3ABC20295DC29900888778 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9F3ABC21295DC2A500888778 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9F3ABC23295DD08F00888778 /* GameView.swift */,
+				9F3ABC25295DD26900888778 /* QueryOptionView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -113,12 +171,28 @@
 			mainGroup = 9F21CFCF290EAE8400A47AC5;
 			productRefGroup = 9F21CFD9290EAE8400A47AC5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9F21CFFB290EB06D00A47AC5 /* Products */;
+					ProjectRef = 9F21CFFA290EB06D00A47AC5 /* Memorize.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9F21CFD7290EAE8400A47AC5 /* QuizApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9F21CFFF290EB06D00A47AC5 /* Memorize.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Memorize.app;
+			remoteRef = 9F21CFFE290EB06D00A47AC5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9F21CFD6290EAE8400A47AC5 /* Resources */ = {
@@ -138,6 +212,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F21CFDE290EAE8400A47AC5 /* ContentView.swift in Sources */,
+				9F3ABC24295DD08F00888778 /* GameView.swift in Sources */,
+				9F3ABC26295DD26900888778 /* QueryOptionView.swift in Sources */,
 				9F21CFDC290EAE8400A47AC5 /* QuizAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
