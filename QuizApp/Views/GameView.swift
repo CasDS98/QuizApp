@@ -11,6 +11,7 @@ struct GameView: View {
     var body: some View {
         VStack {
             QueryOptionView()
+            AnswerView()
             QueryOptionView()
         }
     }

@@ -9,7 +9,19 @@ import SwiftUI
 
 struct QueryOptionView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            StrokeText(text: "Title", width: 1, color: .black)
+                       .foregroundColor(.white)
+                       .font(.system(size: 24, weight: .bold))
+            StrokeText(text: "description of event", width: 1, color: .black)
+                       .foregroundColor(.white)
+                       .font(.system(size: 12))
+            StrokeText(text: "year", width: 1, color: .black)
+                       .foregroundColor(.white)
+                       .font(.system(size: 18, weight: .bold))
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background( Image("testImage")
+            .resizable())
+            .aspectRatio(contentMode: .fit)
     }
 }
 
@@ -18,3 +30,4 @@ struct QueryOptionView_Previews: PreviewProvider {
         QueryOptionView()
     }
 }
+
