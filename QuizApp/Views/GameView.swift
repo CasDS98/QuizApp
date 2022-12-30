@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct GameView: View {
+    @EnvironmentObject private var game: QuizGameViewModel
+    
     var body: some View {
         VStack {
-            QueryOptionView()
+            QueryOptionView(queryOption: game.queryOptionA)
             AnswerView()
-            QueryOptionView()
+            QueryOptionView(queryOption: game.queryOptionB)
         }
     }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
-        GameView()
+        GameView().environmentObject(QuizGameViewModel())
     }
 }
