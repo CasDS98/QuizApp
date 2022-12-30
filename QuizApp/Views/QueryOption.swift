@@ -8,10 +8,10 @@
 import Foundation
 
 struct QueryOption{
-    let title : String
-    let description : String
-    let year : Int
-    let showYear = false
+    var title : String
+    var description : String
+    var year : Int
+    var showYear = false
     
     init(title: String, description: String, year: Int) {
         self.title = title

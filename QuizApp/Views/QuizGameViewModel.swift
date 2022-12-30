@@ -16,11 +16,37 @@ class QuizGameViewModel: ObservableObject{
     
     var queryOptionA: QueryOption
     {
-        model.querOptionA
+        model.queryOptionA
     }
     
     var queryOptionB: QueryOption
     {
-        model.querOptionB
+        model.queryOptionB
+    }
+    
+    var score: Int
+    {
+        model.score
+    }
+    
+    var isPlaying: Bool
+    {
+        model.isPlaying
+    }
+    
+    func onAnswerAfter()
+    {
+
+        model.registerAnswer(answer: .after)
+    }
+    
+    func onAnswerBefore()
+    {
+        model.registerAnswer(answer: .before)
+    }
+    
+    func reset()
+    {
+        model.reset()
     }
 }

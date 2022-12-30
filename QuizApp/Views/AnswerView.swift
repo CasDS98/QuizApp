@@ -8,19 +8,34 @@
 import SwiftUI
 
 struct AnswerView: View {
+    @EnvironmentObject private var game: QuizGameViewModel
+
+    
     var body: some View {
         HStack{
-            Button {
-            } label: {
-                Text("Before").foregroundColor(.white)
-            }.frame(maxWidth: .infinity).buttonStyle(.bordered)
-                .controlSize(.large)
+            if(game.isPlaying)
+            {
+                Button(action: {game.onAnswerBefore()}) {
+                    Text("Before").foregroundColor(.white)
+                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
+                    .controlSize(.large)}
+            }
+           
+            if(!game.isPlaying){
+                Button(action: {game.reset()}) {
+                    Text("Try again").foregroundColor(.white)
+                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
+                    .controlSize(.large)}
+            }
+         
+            if(game.isPlaying)
+            {
+                Button(action: {game.onAnswerAfter()}) {
+                    Text("After").foregroundColor(.white)
+                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
+                    .controlSize(.large)}
+            }
             
-            Button {
-            } label: {
-                Text("After").foregroundColor(.white)
-            }.frame(maxWidth: .infinity).buttonStyle(.bordered)
-                .controlSize(.large)
         }.background(Color.red).border(.black)
             
     }
@@ -28,6 +43,6 @@ struct AnswerView: View {
 
 struct AnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerView()
+        AnswerView().environmentObject(QuizGameViewModel())
     }
 }

@@ -5,16 +5,17 @@
 //  Created by Cas De Smet on 29/12/2022.
 //
 
-import SwiftUI
+import SwiftUI  
 
 struct GameView: View {
     @EnvironmentObject private var game: QuizGameViewModel
     
     var body: some View {
         VStack {
-            QueryOptionView(queryOption: game.queryOptionA)
+            QueryOptionView(queryOption: game.queryOptionA).environmentObject(game)
             AnswerView()
-            QueryOptionView(queryOption: game.queryOptionB)
+            QueryOptionView(queryOption: game.queryOptionB).environmentObject(game)
+            Text("score: " + String(game.score))
         }
     }
 }
