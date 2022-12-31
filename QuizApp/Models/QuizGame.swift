@@ -71,22 +71,30 @@ struct QuizGame{
         queryOptionA.year = queryOptionB.year
         
         //TODO get new data from api
-        queryOptionB.year = Int.random(in: -2000..<2000)
+        queryOptionB = getRandomQueryOption()
         
         
     }
     
-    private func getRandomEvent()
+    private func getRandomQueryOption() -> QueryOption
     {
         let url = URL(string: "https://history.muffinlabs.com/date/2/14")!
+        var queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
         URLSession.shared.fetchData(for: url) { (result: Result<Request, Error>) in
             switch result {
-            case .success(_):
-              print("success")
+            case .success(let request):
+                let numberOfEvents = request.data?.events?.count ?? -1
+                let randNumber = Int.random(in: 0..<numberOfEvents)
+                let event = (request.data?.events?[randNumber])!
+                queryOption.title = event.links?[0].title ?? ""
+                queryOption.description = event.text ?? ""
+                queryOption.year = Int(event.year ?? "0") ?? 0
             case .failure(_):
                 print("failure")
           }
         }
+        
+        return queryOption;
     }
 }
 
