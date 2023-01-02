@@ -34,19 +34,19 @@ class QuizGameViewModel: ObservableObject{
         model.isPlaying
     }
     
-    func onAnswerAfter()
+    func onAnswerAfter() async
     {
 
-        model.registerAnswer(answer: .after)
+        await model.registerAnswer(answer: .after)
     }
     
-    func onAnswerBefore()
+    func onAnswerBefore() async
     {
-        model.registerAnswer(answer: .before)
+        await model.registerAnswer(answer: .before)
     }
     
-    func reset()
+    func reset() async
     {
-        model.reset()
+        await model.reset()
     }
 }

@@ -15,14 +15,14 @@ struct AnswerView: View {
         HStack{
             if(game.isPlaying)
             {
-                Button(action: {game.onAnswerBefore()}) {
+                Button(action: { Task{ await game.onAnswerBefore()}}) {
                     Text("Before").foregroundColor(.white)
                         .frame(maxWidth: .infinity).buttonStyle(.bordered)
                     .controlSize(.large)}
             }
            
             if(!game.isPlaying){
-                Button(action: {game.reset()}) {
+                Button(action: {Task { await game.reset()}}) {
                     Text("Try again").foregroundColor(.white)
                         .frame(maxWidth: .infinity).buttonStyle(.bordered)
                     .controlSize(.large)}
@@ -30,7 +30,7 @@ struct AnswerView: View {
          
             if(game.isPlaying)
             {
-                Button(action: {game.onAnswerAfter()}) {
+                Button(action: { Task{ await game.onAnswerAfter()}}) {
                     Text("After").foregroundColor(.white)
                         .frame(maxWidth: .infinity).buttonStyle(.bordered)
                     .controlSize(.large)}

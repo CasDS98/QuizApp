@@ -24,46 +24,54 @@ struct QuizGame{
         self.queryOptionB = QueryOption(title: "titleB", description: "descriptionB", year: 1000)
     }
     
-    mutating func registerAnswer(answer : Answer)
+    mutating func registerAnswer(answer : Answer) async
     {
         let diff = queryOptionA.year - queryOptionB.year
         
         if(diff == 0)
         {
-            correctAnswer()
+            await correctAnswer()
         }
         else
         {
             switch answer{
                 case .before:
-                    if(diff < 0) {correctAnswer()}
-                    else {wrongAnswer()}
+                    if(diff < 0) {await correctAnswer()}
+                    else {await wrongAnswer()}
                         
                 case .after:
-                    if(diff > 0) {correctAnswer()}
-                    else {wrongAnswer()}
+                    if(diff > 0) {await correctAnswer()}
+                    else {await wrongAnswer()}
             }
         }
     }
     
-    mutating private func correctAnswer()
+    mutating private func correctAnswer() async
     {
         score += 1
-        switchQueryOptions()
+        await switchQueryOptions()
     }
     
-    mutating private func wrongAnswer()
+    mutating private func wrongAnswer() async
     {
         isPlaying = false
     }
     
-    mutating func reset()
+    mutating func reset() async
     {
         score = 0;
         isPlaying = true
+        do{
+            
+            queryOptionA = try await getRandomQueryOption().result.get()
+            queryOptionB = try await getRandomQueryOption().result.get()
+            
+         } catch{
+             print("Request failed with error: \(error)")
+         }
     }
     
-    mutating private func switchQueryOptions()
+    mutating private func switchQueryOptions() async
     {
         //transfer data from query b to query a
         queryOptionA.title = queryOptionB.title
@@ -71,49 +79,64 @@ struct QuizGame{
         queryOptionA.year = queryOptionB.year
         
         //TODO get new data from api
-        queryOptionB = getRandomQueryOption()
+       do{
+           try  queryOptionB = await getRandomQueryOption().result.get()
+           
+        } catch{
+            print("Request failed with error: \(error)")
+        }
         
         
     }
     
-    private func getRandomQueryOption() -> QueryOption
+
+
+    
+    private func getRandomQueryOption() async throws -> Task<QueryOption, Error>
     {
-        let url = URL(string: "https://history.muffinlabs.com/date/2/14")!
-        var queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
-        URLSession.shared.fetchData(for: url) { (result: Result<Request, Error>) in
-            switch result {
-            case .success(let request):
+        Task {
+            
+            do {
+                var queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
+                let request = try await DataFetcher.fetchEventsWithAsyncURLSession()
                 let numberOfEvents = request.data?.events?.count ?? -1
                 let randNumber = Int.random(in: 0..<numberOfEvents)
                 let event = (request.data?.events?[randNumber])!
                 queryOption.title = event.links?[0].title ?? ""
                 queryOption.description = event.text ?? ""
                 queryOption.year = Int(event.year ?? "0") ?? 0
-            case .failure(_):
-                print("failure")
-          }
+                return queryOption
+            } catch {
+                throw error
+            }
+            
         }
-        
-        return queryOption;
+    }
+    
+}
+
+//code from https://swiftsenpai.com/swift/async-await-network-requests/
+struct DataFetcher {
+    
+    enum DataFetcherError: Error {
+        case invalidURL
+        case missingData
+    }
+    
+    static func fetchEventsWithAsyncURLSession() async throws -> Request {
+
+        guard let url = URL(string: "https://history.muffinlabs.com/date/2/14") else {
+            throw DataFetcherError.invalidURL
+        }
+
+        // Use the async variant of URLSession to fetch data
+        // Code might suspend here
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        // Parse the JSON data
+        let request = try JSONDecoder().decode(Request.self, from: data)
+        return request
     }
 }
 
-//code from https://lukeroberts.co/blog/fetch-data-api/
-extension URLSession {
-  func fetchData<T: Decodable>(for url: URL, completion: @escaping (Result<T, Error>) -> Void) {
-    self.dataTask(with: url) { (data, response, error) in
-      if let error = error {
-        completion(.failure(error))
-      }
 
-      if let data = data {
-        do {
-          let object = try JSONDecoder().decode(T.self, from: data)
-          completion(.success(object))
-        } catch let decoderError {
-          completion(.failure(decoderError))
-        }
-      }
-    }.resume()
-  }
-}
