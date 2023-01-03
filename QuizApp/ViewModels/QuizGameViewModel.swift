@@ -50,3 +50,5 @@ class QuizGameViewModel: ObservableObject{
         await model.reset()
     }
 }
+
+
