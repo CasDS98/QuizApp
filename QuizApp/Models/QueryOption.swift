@@ -12,6 +12,7 @@ struct QueryOption{
     var description : String
     var year : Int
     var showYear = false
+    var imageUrl : String = ""
     
     init(title: String, description: String, year: Int) {
         self.title = title

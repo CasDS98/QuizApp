@@ -33,7 +33,7 @@ struct QueryOptionView: View {
                        .foregroundColor(.white)
                        .font(.system(size: 18, weight: .bold))
                        .frame(maxHeight: .infinity)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity).background( WebImage(url: URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Biblioth%C3%A8que_nationale_de_France_-_Bible_de_Vivien_Ms._Latin_1_folio_423r_d%C3%A9tail_Le_comte_Vivien_offre_le_manuscrit_de_la_Bible_faite_%C3%A0_l%27abbaye_de_Saint-Martin_de_Tours_%C3%A0_Charles_le_Chauve.jpg/50px-thumbnail.jpg"))
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background( WebImage(url: URL(string: queryOption.imageUrl))
             .resizable())
             .aspectRatio(contentMode: .fit)
     }
