@@ -10,7 +10,6 @@ import SDWebImageSwiftUI
 
 struct QueryOptionView: View {
     let queryOption : QueryOption
-    var backgroundImage = Image("testImage")
     
     init(queryOption: QueryOption) {
         self.queryOption = queryOption
@@ -27,12 +26,13 @@ struct QueryOptionView: View {
             StrokeText(text: queryOption.description, width: 1, color: .black)
                        .foregroundColor(.white)
                        .font(.system(size: 12))
-                       
+                       .frame(height: 90, alignment: .top)
+                       .padding([.all], 20)
             
-            StrokeText(text: String(queryOption.year), width: 1, color: .black)
-                       .foregroundColor(.white)
-                       .font(.system(size: 18, weight: .bold))
-                       .frame(maxHeight: .infinity)
+            if(queryOption.isYearVisible){StrokeText(text: String(queryOption.year), width: 1, color: .black)
+                    .foregroundColor(.white)
+                    .font(.system(size: 18, weight: .bold))
+                .frame(maxHeight: .infinity)}
         }.frame(maxWidth: .infinity, maxHeight: .infinity).background( WebImage(url: URL(string: queryOption.imageUrl))
             .resizable())
             .aspectRatio(contentMode: .fit)

@@ -22,6 +22,7 @@ struct QuizGame{
     init() {
         self.queryOptionA = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
         self.queryOptionB = QueryOption(title: "titleB", description: "descriptionB", year: 1000)
+        queryOptionB.HideYear()
     }
     
     mutating func registerAnswer(answer : Answer) async
@@ -50,11 +51,13 @@ struct QuizGame{
     {
         score += 1
         await switchQueryOptions()
+        queryOptionB.HideYear()
     }
     
     mutating private func wrongAnswer() async
     {
         isPlaying = false
+        queryOptionB.ShowYear()
     }
     
     mutating func reset() async
@@ -76,6 +79,8 @@ struct QuizGame{
          } catch{
              print("Request failed with error: \(error)")
          }
+        
+        queryOptionB.HideYear()
     }
     
     mutating private func switchQueryOptions() async
@@ -115,9 +120,16 @@ struct QuizGame{
                 let numberOfEvents = request.data?.events?.count ?? -1
                 let randNumber = Int.random(in: 0..<numberOfEvents)
                 let event = (request.data?.events?[randNumber])!
-                queryOption.title = event.links?[0].title ?? ""
-                queryOption.description = event.text ?? ""
+                
+                //replace years in title and description
+                let regex = try! NSRegularExpression(pattern: "\\d{4}")
+                let titleString = event.links?[0].title ?? ""
+                queryOption.title = regex.stringByReplacingMatches(in: titleString, range: NSRange(location: 0, length: titleString.count), withTemplate:"****")
+                let textString = event.text ?? ""
+                queryOption.description = regex.stringByReplacingMatches(in: textString, range: NSRange(location: 0, length: textString.count), withTemplate: "****")
                 queryOption.year = Int(event.year ?? "0") ?? 0
+                
+                
                 return queryOption
             } catch {
                 throw error
@@ -151,8 +163,9 @@ struct DataFetcher {
     }
     
     static func fetchEventsWithAsyncURLSession() async throws -> Request {
-
-        guard let url = URL(string: "https://history.muffinlabs.com/date/2/14") else {
+        let randMonth = Int.random(in: 1..<13)
+        let randDay = Int.random(in: 1..<29)
+        guard let url = URL(string: "https://history.muffinlabs.com/date/" + String(randMonth) + "/" + String(randDay)) else {
             throw DataFetcherError.invalidURL
         }
 
