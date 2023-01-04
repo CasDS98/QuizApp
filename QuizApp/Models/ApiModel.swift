@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//used this site to generate models: https://app.quicktype.io/ 
 //Event data models
 struct Request: Codable {
     let date: String?

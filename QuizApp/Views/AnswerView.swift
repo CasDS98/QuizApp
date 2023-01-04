@@ -16,27 +16,27 @@ struct AnswerView: View {
             if(game.isPlaying)
             {
                 Button(action: { Task{ await game.onAnswerBefore()}}) {
-                    Text("Before").foregroundColor(.white)
-                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    .controlSize(.large)}
+                    Text("Before").font(.system(size: 24)).foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                    .controlSize(.large)}.buttonStyle(.bordered)
             }
            
             if(!game.isPlaying){
                 Button(action: {Task { await game.reset()}}) {
-                    Text("Try again").foregroundColor(.white)
+                    Text("Try again").font(.system(size: 24)).foregroundColor(.white)
                         .frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    .controlSize(.large)}
+                    .controlSize(.large)}.buttonStyle(.bordered)
             }
          
             if(game.isPlaying)
             {
                 Button(action: { Task{ await game.onAnswerAfter()}}) {
-                    Text("After").foregroundColor(.white)
+                    Text("After").font(.system(size: 24)).foregroundColor(.white)
                         .frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    .controlSize(.large)}
+                    .controlSize(.large)}.buttonStyle(.bordered)
             }
             
-        }.background(Color.red).border(.black)
+        }.frame(height: 50).background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
             
     }
 }

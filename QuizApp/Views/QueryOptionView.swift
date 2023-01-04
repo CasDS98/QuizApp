@@ -18,24 +18,24 @@ struct QueryOptionView: View {
     var body: some View {
         VStack{
             
-            StrokeText(text: queryOption.title, width: 1, color: .black)
+            StrokeText(text: queryOption.title, width: 2, color: .black)
                        .foregroundColor(.white)
-                       .font(.system(size: 24, weight: .bold))
+                       .font(.system(size: 28, weight: .bold))
                        .frame(maxHeight: .infinity)
             
             StrokeText(text: queryOption.description, width: 1, color: .black)
                        .foregroundColor(.white)
-                       .font(.system(size: 12))
+                       .font(.system(size: 18))
                        .frame(height: 90, alignment: .top)
                        .padding([.all], 20)
             
-            if(queryOption.isYearVisible){StrokeText(text: String(queryOption.year), width: 1, color: .black)
+            if(queryOption.isYearVisible){StrokeText(text: String(queryOption.year), width: 2, color: .black)
                     .foregroundColor(.white)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 28, weight: .bold))
                 .frame(maxHeight: .infinity)}
-        }.frame(maxWidth: .infinity, maxHeight: .infinity).background( WebImage(url: URL(string: queryOption.imageUrl))
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(.zero).background( WebImage(url: URL(string: queryOption.imageUrl))
             .resizable())
-            .aspectRatio(contentMode: .fit)
+           
     }
 }
 

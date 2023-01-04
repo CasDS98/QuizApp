@@ -12,11 +12,11 @@ struct GameView: View {
     
     var body: some View {
         VStack {
-            QueryOptionView(queryOption: game.queryOptionA).environmentObject(game)
+            QueryOptionView(queryOption: game.queryOptionA).environmentObject(game).background(Color(red: 147.0/255.0, green: 225.0/255.0, blue: 216.0/255.0))
             AnswerView()
-            QueryOptionView(queryOption: game.queryOptionB).environmentObject(game)
-            Text("score: " + String(game.score))
-        }
+            QueryOptionView(queryOption: game.queryOptionB).environmentObject(game).background(Color(red: 221.0/255.0, green: 225.0/255.0, blue: 247.0/255.0))
+            Text("score: " + String(game.score)).frame(maxWidth: .infinity, maxHeight: 50).background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
+        }.background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
     }
 }
 
