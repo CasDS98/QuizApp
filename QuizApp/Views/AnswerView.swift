@@ -9,33 +9,52 @@ import SwiftUI
 
 struct AnswerView: View {
     @EnvironmentObject private var game: QuizGameViewModel
-
+    @State private var isLoading = false
     
     var body: some View {
         HStack{
-            if(game.isPlaying)
+            if(isLoading)
             {
-                Button(action: { Task{ await game.onAnswerBefore()}}) {
-                    Text("Before").font(.system(size: 24)).foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                    .controlSize(.large)}.buttonStyle(.bordered)
+                ProgressView().controlSize(.large)
+                    .frame(maxWidth: .infinity)
             }
-           
-            if(!game.isPlaying){
-                Button(action: {Task { await game.reset()}}) {
-                    Text("Try again").font(.system(size: 24)).foregroundColor(.white)
-                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    .controlSize(.large)}.buttonStyle(.bordered)
-            }
-         
-            if(game.isPlaying)
+            else
             {
-                Button(action: { Task{ await game.onAnswerAfter()}}) {
-                    Text("After").font(.system(size: 24)).foregroundColor(.white)
-                        .frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    .controlSize(.large)}.buttonStyle(.bordered)
+                if(game.isPlaying)
+                {
+                    Button(action: { Task{
+                        self.isLoading = true
+                        await game.onAnswerBefore()
+                        self.isLoading = false
+                    }}) {
+                        Text("Before").font(.system(size: 24)).foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                        .controlSize(.large)}.buttonStyle(.bordered)
+                }
+                
+                if(!game.isPlaying){
+                    Button(action: {Task {
+                        self.isLoading = true
+                        await game.reset()
+                        self.isLoading = false
+                    }}) {
+                        Text("Try again").font(.system(size: 24)).foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                        .controlSize(.large)}.buttonStyle(.bordered)
+                }
+                
+                if(game.isPlaying)
+                {
+                    Button(action: { Task{
+                        self.isLoading = true
+                        await game.onAnswerAfter()
+                        self.isLoading = false
+                    }}) {
+                        Text("After").font(.system(size: 24)).foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                        .controlSize(.large)}.buttonStyle(.bordered)
+                }
             }
-            
         }.frame(height: 50).background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
             
     }
