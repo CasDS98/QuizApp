@@ -11,11 +11,15 @@ struct StartScreenView: View {
     @EnvironmentObject private var game: QuizGameViewModel
     
     var body: some View {
-        NavigationView {
-            NavigationLink(destination: GameView().environmentObject(game)) {
-                Text("Start Game")
+        VStack{
+            NavigationView {
+                NavigationLink(destination: GameView().environmentObject(game)) {
+                    Text("Start Game")
+                    
+                }
             }
-        }
+            Text("Highscore: " + String(game.highScore))
+      }
     }
 }
 

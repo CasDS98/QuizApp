@@ -17,12 +17,29 @@ struct QuizGame{
     private(set) var queryOptionB: QueryOption
     private(set) var score : Int = 0
     private(set) var isPlaying : Bool = true
+    private(set) var highScore : Int = 0
 
 
     init() {
         self.queryOptionA = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
         self.queryOptionB = QueryOption(title: "titleB", description: "descriptionB", year: 1000)
         queryOptionB.HideYear()
+        highScore = GetHighScore()
+    }
+    
+    private func GetHighScore() -> Int{
+        let defaults = UserDefaults.standard
+        return defaults.value(forKey: "highScore") as? Int ?? 0
+    }
+    
+    private mutating func SetNewHighScore(newHighScore : Int)
+    {
+        if(newHighScore > GetHighScore())
+        {
+            let defaults = UserDefaults.standard
+            defaults.set(newHighScore, forKey: "highScore")
+            highScore = newHighScore
+        }
     }
     
     mutating func registerAnswer(answer : Answer) async
@@ -45,6 +62,7 @@ struct QuizGame{
                     else {await wrongAnswer()}
             }
         }
+        SetNewHighScore(newHighScore: score)
     }
     
     mutating private func correctAnswer() async

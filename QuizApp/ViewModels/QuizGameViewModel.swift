@@ -29,6 +29,11 @@ class QuizGameViewModel: ObservableObject{
         model.score
     }
     
+    var highScore: Int
+    {
+        model.highScore
+    }
+    
     var isPlaying: Bool
     {
         model.isPlaying
@@ -36,7 +41,6 @@ class QuizGameViewModel: ObservableObject{
     
     func onAnswerAfter() async
     {
-
         await model.registerAnswer(answer: .after)
     }
     
