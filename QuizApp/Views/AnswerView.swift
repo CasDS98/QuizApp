@@ -22,22 +22,22 @@ struct AnswerView: View {
             {
                 if(game.isPlaying)
                 {
-                    Button(action: { Task{
+                    Button(action: {  DispatchQueue.main.async {Task{
                         self.isLoading = true
                         await game.onAnswerBefore()
                         self.isLoading = false
-                    }}) {
+                    }}}) {
                         Text("Before").font(.system(size: 24)).foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                         .controlSize(.large)}.buttonStyle(.bordered)
                 }
                 
                 if(!game.isPlaying){
-                    Button(action: {Task {
+                    Button(action: {DispatchQueue.main.async {Task {
                         self.isLoading = true
                         await game.reset()
                         self.isLoading = false
-                    }}) {
+                    }}}) {
                         Text("Try again").font(.system(size: 24)).foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                         .controlSize(.large)}.buttonStyle(.bordered)
@@ -45,11 +45,11 @@ struct AnswerView: View {
                 
                 if(game.isPlaying)
                 {
-                    Button(action: { Task{
+                    Button(action: { DispatchQueue.main.async {Task{
                         self.isLoading = true
                         await game.onAnswerAfter()
                         self.isLoading = false
-                    }}) {
+                    }}}) {
                         Text("After").font(.system(size: 24)).foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                         .controlSize(.large)}.buttonStyle(.bordered)

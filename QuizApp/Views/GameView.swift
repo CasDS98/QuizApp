@@ -10,6 +10,7 @@ import SwiftUI
 struct GameView: View {
     @EnvironmentObject private var game: QuizGameViewModel
     @State private var isLoading = false
+
     
     var body: some View {
         VStack {
@@ -39,3 +40,5 @@ struct GameView_Previews: PreviewProvider {
         GameView().environmentObject(QuizGameViewModel())
     }
 }
+
+
