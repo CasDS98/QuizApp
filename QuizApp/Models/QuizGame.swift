@@ -98,6 +98,7 @@ struct QuizGame{
              print("Request failed with error: \(error)")
          }
         
+        queryOptionA.isUpper = true
         queryOptionB.HideYear()
     }
     

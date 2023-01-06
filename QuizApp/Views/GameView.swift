@@ -21,12 +21,12 @@ struct GameView: View {
             }
             else
             {
-            QueryOptionView(queryOption: game.queryOptionA).environmentObject(game).background(Color(red: 147.0/255.0, green: 225.0/255.0, blue: 216.0/255.0))
+            QueryOptionView(queryOption: game.queryOptionA).environmentObject(game)
             AnswerView()
-            QueryOptionView(queryOption: game.queryOptionB).environmentObject(game).background(Color(red: 221.0/255.0, green: 225.0/255.0, blue: 247.0/255.0))
+            QueryOptionView(queryOption: game.queryOptionB).environmentObject(game)
             ScoreView().environmentObject(game)
             }
-            }.background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0)).onAppear(){
+        }.background(Color(red: 255.0/255.0, green: 128.0/255.0, blue: 128.0/255.0)).onAppear(){
                 isLoading = true
                 Task{ await game.reset()
                     isLoading = false

@@ -33,8 +33,15 @@ struct QueryOptionView: View {
                     .foregroundColor(.white)
                     .font(.system(size: 28, weight: .bold))
                 .frame(maxHeight: .infinity)}
-        }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(.zero).background( WebImage(url: URL(string: queryOption.imageUrl))
-            .resizable())
+                
+            if(queryOption.isUpper){StrokeText(text: "Happened", width: 2, color: .black)
+                    .foregroundColor(.white)
+                    .font(.system(size: 28, weight: .bold))
+                .frame(maxHeight: .infinity)}
+            
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).padding(.zero).background( WebImage(url: URL(string: queryOption.imageUrl)).placeholder {
+            Rectangle().foregroundColor(Color(red: 255.0/255.0, green: 191.0/255.0, blue: 191.0/255.0))
+            }.resizable().cornerRadius(20))
            
     }
 }

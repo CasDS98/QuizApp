@@ -42,6 +42,11 @@ struct AnswerView: View {
                             .frame(maxWidth: .infinity)
                         .controlSize(.large)}.buttonStyle(.bordered)
                 }
+                 else
+                {
+                     Text("OR").font(.system(size: 24)).foregroundColor(.white)
+                         .frame(maxWidth: .infinity)
+                }
                 
                 if(game.isPlaying)
                 {
@@ -55,7 +60,7 @@ struct AnswerView: View {
                         .controlSize(.large)}.buttonStyle(.bordered)
                 }
             }
-        }.frame(height: 50).background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
+        }.frame(height: 50).padding()
             
     }
 }

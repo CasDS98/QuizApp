@@ -13,7 +13,7 @@ struct ScoreView: View {
         HStack{
             Text("Score: " + String(game.score)).frame(maxWidth: .infinity, maxHeight: 50)
             Text("Highscore: " + String(game.highScore)).frame(maxWidth: .infinity, maxHeight: 50)
-        }.background(Color(red: 255.0/255.0, green: 166.0/255.0, blue: 158.0/255.0))
+        }
     }
 }
 
