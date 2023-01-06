@@ -27,10 +27,12 @@ struct GameView: View {
             ScoreView().environmentObject(game)
             }
         }.background(Color(red: 255.0/255.0, green: 128.0/255.0, blue: 128.0/255.0)).onAppear(){
-                isLoading = true
-                Task{ await game.reset()
-                    isLoading = false
-                }
+            self.isLoading = true
+            DispatchQueue.main.async {
+                game.reset()
+                self.isLoading = false
+            }
+               
         }
     }
 }

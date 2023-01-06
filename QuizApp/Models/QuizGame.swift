@@ -42,67 +42,61 @@ struct QuizGame{
         }
     }
     
-    mutating func registerAnswer(answer : Answer) async
+    mutating func registerAnswer(answer : Answer)
     {
         let diff = queryOptionA.year - queryOptionB.year
         
         if(diff == 0)
         {
-            await correctAnswer()
+             correctAnswer()
         }
         else
         {
             switch answer{
                 case .before:
-                    if(diff < 0) {await correctAnswer()}
-                    else {await wrongAnswer()}
+                    if(diff < 0) { correctAnswer()}
+                    else { wrongAnswer()}
                         
                 case .after:
-                    if(diff > 0) {await correctAnswer()}
-                    else {await wrongAnswer()}
+                    if(diff > 0) { correctAnswer()}
+                    else { wrongAnswer()}
             }
         }
         SetNewHighScore(newHighScore: score)
     }
     
-    mutating private func correctAnswer() async
+    mutating private func correctAnswer()
     {
         score += 1
-        await switchQueryOptions()
+        switchQueryOptions()
         queryOptionB.HideYear()
     }
     
-    mutating private func wrongAnswer() async
+    mutating private func wrongAnswer()
     {
         isPlaying = false
         queryOptionB.ShowYear()
     }
     
-    mutating func reset() async
+    mutating func reset()
     {
         score = 0;
         isPlaying = true
-        do{
-            
-            queryOptionA = try await getRandomQueryOption().result.get()
-            queryOptionB = try await getRandomQueryOption().result.get()
-            
-         } catch{
-             print("Request failed with error: \(error)")
-         }
+
+        queryOptionA = getRandomQueryOption()
+        queryOptionB = getRandomQueryOption()
+
         
-        do{
-            try  queryOptionA.imageUrl = await getImageUrl(searchTerm: queryOptionA.title).result.get()
-            try  queryOptionB.imageUrl = await getImageUrl(searchTerm: queryOptionB.title).result.get()
-         } catch{
-             print("Request failed with error: \(error)")
-         }
+        
+         queryOptionA.imageUrl =  getImageUrl(searchTerm: queryOptionA.title)
+         queryOptionB.imageUrl =  getImageUrl(searchTerm: queryOptionB.title)
+    
         
         queryOptionA.isUpper = true
         queryOptionB.HideYear()
     }
     
-    mutating private func switchQueryOptions() async
+    mutating private func switchQueryOptions()
     {
         //transfer data from query b to query a
         queryOptionA.title = queryOptionB.title
@@ -111,27 +105,45 @@ struct QuizGame{
         queryOptionA.imageUrl = queryOptionB.imageUrl
         
         //get new data from api
-       do{
-           try  queryOptionB = await getRandomQueryOption().result.get()
-           
-        } catch{
-            print("Request failed with error: \(error)")
-        }
-        
+        queryOptionB = getRandomQueryOption()
+      
         //get image url
-        do{
-            try  queryOptionB.imageUrl = await getImageUrl(searchTerm: queryOptionB.title).result.get()
-         } catch{
-             print("Request failed with error: \(error)")
-         }
+        queryOptionB.imageUrl =  getImageUrl(searchTerm: queryOptionB.title)
     }
     
 
 
     
-    private func getRandomQueryOption() async throws -> Task<QueryOption, Error>
+    private func getRandomQueryOption() -> QueryOption
     {
-        Task {
+        let semaphore = DispatchSemaphore(value: 0)
+        let fetcher = DataFetcher()
+        var queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
+        
+        fetcher.fetchEventsWithAsyncURLSession(){result in
+            switch result{
+            case .success(let request):
+                let numberOfEvents = request.data?.events?.count ?? -1
+                let randNumber = Int.random(in: 0..<numberOfEvents)
+                let event = (request.data?.events?[randNumber])!
+                
+                //replace years in title and description
+                let regex = try! NSRegularExpression(pattern: "\\d{4}")
+                let titleString = event.links?[0].title ?? ""
+                queryOption.title = regex.stringByReplacingMatches(in: titleString, range: NSRange(location: 0, length: titleString.count), withTemplate:"****")
+                let textString = event.text ?? ""
+                queryOption.description = regex.stringByReplacingMatches(in: textString, range: NSRange(location: 0, length: textString.count), withTemplate: "****")
+                queryOption.year = Int(event.year ?? "0") ?? 0
+            case .failure(let error):
+                print("Error: \(error)")
+                queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return queryOption
+    }
+      /*  Task {
             
             do {
                 var queryOption = QueryOption(title: "titleA", description: "descriptionA", year: 2000)
@@ -155,25 +167,30 @@ struct QuizGame{
             }
             
         }
-    }
+    }*/
     
-    private func getImageUrl(searchTerm : String) async throws -> Task<String, Error>
+    private func getImageUrl(searchTerm : String) -> String
     {
-        Task {
-            
-            do {
-                let wikiData = try await DataFetcher.fetchWikiDatasWithAsyncURLSession(searchTerm: searchTerm)
-                return wikiData.query?.pages?[0].thumbnail?.source ?? ""
-            } catch {
-                throw error
+        let semaphore = DispatchSemaphore(value: 0)
+        let fetcher = DataFetcher()
+        var url = ""
+        
+        fetcher.fetchWikiDatasWithAsyncURLSession(searchTerm: searchTerm){result in
+            switch result{
+            case .success(let wikiData):
+                url = wikiData.query?.pages?[0].thumbnail?.source ?? ""
+            case .failure(let error):
+                print("Error: \(error)")
+                url = ""
             }
-            
+            semaphore.signal()
         }
+        semaphore.wait()
+        return url
     }
-    
+
 }
 
-//code from https://swiftsenpai.com/swift/async-await-network-requests/
 struct DataFetcher {
     
     enum DataFetcherError: Error {
@@ -181,36 +198,61 @@ struct DataFetcher {
         case missingData
     }
     
-    static func fetchEventsWithAsyncURLSession() async throws -> Request {
+    func fetchEventsWithAsyncURLSession(completion: @escaping (Result<Request, Error>) -> Void)  {
         let randMonth = Int.random(in: 1..<13)
         let randDay = Int.random(in: 1..<29)
         guard let url = URL(string: "https://history.muffinlabs.com/date/" + String(randMonth) + "/" + String(randDay)) else {
-            throw DataFetcherError.invalidURL
+            completion(.failure(DataFetcherError.invalidURL))
+            return
         }
-
-        // Use the async variant of URLSession to fetch data
-        // Code might suspend here
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        // Parse the JSON data
-        let request = try JSONDecoder().decode(Request.self, from: data)
-        return request
+        
+        URLSession.shared.dataTask(with: url){data, response, error in
+            if let error = error{
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else{
+                completion(.failure(NSError(domain: "", code: 0, userInfo: nil)))
+                return
+            }
+            
+            
+            do{
+                // Parse the JSON data
+                let request = try JSONDecoder().decode(Request.self, from: data)
+                completion(.success(request))
+            }catch{
+                completion(.failure(error))
+            }
+        }.resume()
     }
     
-    static func fetchWikiDatasWithAsyncURLSession(searchTerm : String) async throws -> WikiData {
+    func fetchWikiDatasWithAsyncURLSession(searchTerm : String, completion: @escaping (Result<WikiData, Error>) -> Void) {
 
         guard let url = URL(string: "https://en.wikipedia.org/w/api.php?action=query&formatversion=2&format=json&prop=pageimages%7Cpageterms&titles=" + searchTerm.replacingOccurrences(of: " ", with: "%20")) else {
-            throw DataFetcherError.invalidURL
+            completion(.failure(DataFetcherError.invalidURL))
+            return
         }
 
-        // Use the async variant of URLSession to fetch data
-        // Code might suspend here
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        // Parse the JSON data
-        let wikiData = try JSONDecoder().decode(WikiData.self, from: data)
-        return wikiData
+        URLSession.shared.dataTask(with: url){data, response, error in
+            if let error = error{
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else{
+                completion(.failure(NSError(domain: "", code: 0, userInfo: nil)))
+                return
+            }
+            
+            
+            do{
+                // Parse the JSON data
+                let wikiData = try JSONDecoder().decode(WikiData.self, from: data)
+                completion(.success(wikiData))
+            }catch{
+                completion(.failure(error))
+            }
+        }.resume()
     }
 }
-
 
